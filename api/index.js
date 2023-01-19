@@ -39,7 +39,7 @@ apiRouter.use((req, res, next) => {
     }
   
     next();
-  });
+});
   
 
 
