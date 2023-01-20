@@ -73,11 +73,21 @@ postsRouter.use((req, res, next) => {
 });
 
 postsRouter.get('/', async(req, res) => {
-    const posts = await getAllPosts();
+  try {
+    const allPosts = await getAllPosts();
+
+    const posts = allPosts.filter(post => {
+      // keep a post if it is either active, or if it belongs to the current user
+      return post.active || (req.user && post.author.id === req.user.id);
+
+    });
 
     res.send({
         posts
     });
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
 });
 
 postsRouter.delete('/:postId', requireUser, async (req, res, next) => {
